@@ -1,0 +1,30 @@
+---
+title: "Listen to Assyrian prepositions"
+format: html
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false 
+#| message: false
+#| warning: false
+
+library(tidyverse)
+readxl::read_xlsx("data.xlsx") |> 
+  filter(`n-std` != "musor") |> 
+  mutate(link = "https://lingconlab.ru/AssyrRus/OUT/",
+         audio = str_remove(source, ".TextGrid"),
+         audio = str_c(audio, "-", round(as.double(time_start)*1000)),
+         audio = str_c(audio, "-", round(as.double(time_end)*1000)),
+         audio = str_c(link, audio, ".wav")) |> 
+  mutate(id = 1:n()) |> 
+  select(id, sentence, audio) ->
+df
+
+df |>   
+  mutate(audio = str_glue('<audio controls="" preload="none"><source src="{audio}" type="audio/ogg"></audio> ')) |> 
+  arrange(id) |> 
+  DT::datatable(escape = FALSE, rownames = FALSE, options = list(pageLength = 700))
+```
