@@ -15,7 +15,7 @@ library(tidyverse)
 readxl::read_xlsx("data.xlsx") |> 
   filter(`n-std` != "musor") |> 
   mutate(link = "https://lingconlab.ru/AssyrRus/OUT/",
-         audio = str_remove(source, ".TextGrid"),
+         audio = str_remove(source, ".eaf"),
          audio = str_c(audio, "-", round(as.double(time_start)*1000)),
          audio = str_c(audio, "-", round(as.double(time_end)*1000)),
          audio = str_c(link, audio, ".wav")) |> 
